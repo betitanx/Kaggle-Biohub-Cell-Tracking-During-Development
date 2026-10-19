@@ -1,12 +1,28 @@
 from __future__ import annotations
 
 import argparse
+import re
 from pathlib import Path
 
 import polars as pl
 import tracksdata as td
 
 from tracking_cellmot.io import save_graph
+
+
+def _reject_symlinks(path: Path) -> None:
+    # Inspect lexical ancestors before resolving: resolve() would hide links,
+    # including an ancestor in a path such as "linked/../outputs".
+    absolute = path.absolute()
+    for component in (*reversed(absolute.parents), absolute):
+        if component.is_symlink():
+            raise ValueError(f"Symlink output paths are not allowed: {component}")
+
+
+def _check_output_path(path: Path, overwrite: bool) -> None:
+    _reject_symlinks(path)
+    if path.exists() and not overwrite:
+        raise FileExistsError(f"Output already exists (use --overwrite to replace it): {path}")
 
 
 def build_graph_from_rows(
@@ -48,25 +64,47 @@ def build_graph_from_rows(
 def csv_to_geffs(
     csv_path: Path | str,
     out_dir: Path | str,
-    overwrite: bool = True,
+    overwrite: bool = False,
 ) -> list[Path]:
-    """Convert a submission CSV into one ``{dataset}.geff`` in ``out_dir``; return their paths."""
+    """Convert a CSV to GEFFs after preflighting every dataset and output path.
+
+    Existing outputs require explicit overwrite; symlinks are never allowed.
+    The output tree must not be concurrently modified by untrusted processes:
+    path-based checks cannot make the downstream writer race-free.
+    """
     csv_path = Path(csv_path)
     out_dir = Path(out_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
 
     df = pl.read_csv(
         csv_path,
         columns=["dataset", "row_type", "node_id", "t", "z", "y", "x", "source_id", "target_id"],
+        schema_overrides={"dataset": pl.String},
     )
 
-    written: list[Path] = []
+    _reject_symlinks(out_dir)
+    if out_dir.exists() and not out_dir.is_dir():
+        raise NotADirectoryError(f"Output directory is not a directory: {out_dir}")
+    output_root = out_dir.resolve()
+    outputs = []
     for (name,), group in df.group_by("dataset"):
+        if not isinstance(name, str) or re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9._-]*", name) is None:
+            raise ValueError(f"Invalid dataset name: {name!r}")
+        out_path = out_dir / f"{name}.geff"
+        _check_output_path(out_path, overwrite)
+        if out_path.resolve().parent != output_root:
+            raise ValueError(f"Output path escapes output directory: {out_path}")
+        outputs.append((name, group, out_path))
+
+    # Do not create outputs or invoke the destructive writer until all groups
+    # have passed validation, regardless of Polars' group iteration order.
+    out_dir.mkdir(parents=True, exist_ok=True)
+    written: list[Path] = []
+    for name, group, out_path in outputs:
         node_rows = group.filter(pl.col("row_type") == "node")
         edge_rows = group.filter(pl.col("row_type") == "edge")
 
         graph = build_graph_from_rows(node_rows, edge_rows)
-        out_path = out_dir / f"{name}.geff"
+        _check_output_path(out_path, overwrite)
         save_graph(graph, out_path, overwrite=overwrite)
         written.append(out_path)
         print(f"{name}: {node_rows.height} nodes, {edge_rows.height} edges -> {out_path}")
@@ -79,10 +117,18 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Convert a submission CSV into one .geff per dataset.")
     parser.add_argument("--csv", type=Path, required=True, help="Submission CSV path.")
     parser.add_argument("--out-dir", type=Path, required=True, help="Output directory for .geff files.")
-    parser.add_argument("--no-overwrite", action="store_true", help="Do not overwrite existing geffs.")
+    overwrite_flags = parser.add_mutually_exclusive_group()
+    overwrite_flags.add_argument(
+        "--overwrite", action="store_true", help="Replace existing non-symlink geffs."
+    )
+    overwrite_flags.add_argument(
+        "--no-overwrite", dest="overwrite", action="store_false",
+        help="Do not overwrite existing geffs (default).",
+    )
+    parser.set_defaults(overwrite=False)
     args = parser.parse_args()
 
-    csv_to_geffs(args.csv, args.out_dir, overwrite=not args.no_overwrite)
+    csv_to_geffs(args.csv, args.out_dir, overwrite=args.overwrite)
 
 
 if __name__ == "__main__":
