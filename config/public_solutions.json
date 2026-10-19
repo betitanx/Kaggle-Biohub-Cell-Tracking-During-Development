@@ -1,0 +1,107 @@
+{
+  "competition": "biohub-cell-tracking-during-development",
+  "snapshot_date": "2026-08-04",
+  "policy": "Public notebook scores are discovery evidence only; reproduce code, data inputs, license and holdout behaviour before promotion.",
+  "entries": [
+    {
+      "id": "dark_agi_support_pack",
+      "url": "https://www.kaggle.com/code/boristown/dark-agi-biohub-cell-tracking-solution",
+      "owner": "boristown",
+      "title": "Dark-AGI-Biohub Cell Tracking Solution",
+      "observed_public_score": 0.95,
+      "observed_best_score": 0.952,
+      "observed_version": "V9",
+      "external_inputs": [
+        "Biohub Tracking Support Pack"
+      ],
+      "evidence": [
+        "Public notebook page reports a GPU notebook and Apache-2.0 notebook license.",
+        "Page says it was copied from KAIWALYA RAUT; imported code and assets require separate license review."
+      ],
+      "hypotheses": [
+        "support-pack weights can provide a strong 3D detector",
+        "global/ILP linking should be compared with H1 one-to-one"
+      ],
+      "status": "reproduction_lead_not_reproduced"
+    },
+    {
+      "id": "clean_approach_lightweight_local_cv",
+      "url": "https://www.kaggle.com/code/yusuketogashi/clean-approach-lightweight-local-cv-no-hack",
+      "owner": "yusuketogashi",
+      "title": "Clean Approach + Lightweight Local CV",
+      "observed_public_score": 0.903,
+      "observed_best_score": 0.909,
+      "observed_version": "V89",
+      "external_inputs": [
+        "Biohub Tracking Support Pack",
+        "cellmot-baseline-artifacts"
+      ],
+      "evidence": [
+        "Public notebook page reports a public score snapshot and Apache-2.0 notebook license."
+      ],
+      "hypotheses": [
+        "clean post-processing and local CV can preserve generalization",
+        "cellmot artifacts are a useful reproducibility anchor"
+      ],
+      "status": "reproduction_lead_not_reproduced"
+    },
+    {
+      "id": "modular_last_call_turned",
+      "url": "https://www.kaggle.com/code/yoikoarmor/biohub-modular-last-call-turned",
+      "owner": "yoikoarmor",
+      "title": "Biohub Modular Last Call-Turned",
+      "observed_public_score": null,
+      "observed_best_score": 0.965,
+      "observed_version": "V5",
+      "external_inputs": [],
+      "evidence": [
+        "Public page reports a best-score snapshot but exposes insufficient method detail in the indexed view."
+      ],
+      "hypotheses": [
+        "modular candidate generation/post-processing may add ensemble diversity"
+      ],
+      "status": "method_unknown_reproduction_required"
+    },
+    {
+      "id": "embryo_aware_dual_seed",
+      "url": "https://www.kaggle.com/code/buaaauto/biohub-e016-embryo-aware-dual-seed",
+      "owner": "buaaauto",
+      "title": "Biohub E016 | Embryo-Aware Dual Seed",
+      "observed_public_score": 0.908,
+      "observed_best_score": 0.908,
+      "observed_version": "V2",
+      "external_inputs": [],
+      "evidence": [
+        "Public page title exposes an embryo-aware dual-seed idea; implementation details require notebook retrieval."
+      ],
+      "hypotheses": [
+        "embryo-aware seeds reduce domain-specific tracking failures",
+        "seed diversity is a controlled ensemble axis"
+      ],
+      "status": "reproduction_lead_not_reproduced"
+    },
+    {
+      "id": "adaptive_threshold_ilp_postprocess",
+      "url": "https://www.kaggle.com/code/sdeogade/biohub-cell-tracking-during-development",
+      "owner": "sdeogade",
+      "title": "BioHub Cell Tracking During Development",
+      "observed_public_score": 0.042,
+      "observed_best_score": 0.884,
+      "observed_version": "V20",
+      "external_inputs": [
+        "Biohub Tracking Support Pack",
+        "Biohub Last Call Postprocess V1"
+      ],
+      "evidence": [
+        "Indexed notebook contents expose adaptive threshold, subvoxel refinement, sparse mutual-kNN graph, division gating, ILP, density scaling, one-frame gap closing and short-track filtering.",
+        "The low current score versus best score is a warning that version/seed/post-processing drift matters."
+      ],
+      "hypotheses": [
+        "adaptive threshold + subvoxel refinement improves detections",
+        "mutual-kNN plus ILP improves lineage edges/divisions",
+        "post-processing must be ablated on holdout"
+      ],
+      "status": "components_to_reimplement_notebook_dependent"
+    }
+  ]
+}

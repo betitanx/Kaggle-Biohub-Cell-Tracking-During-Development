@@ -1,0 +1,32 @@
+{
+  "name": "cellmot_community_h9__v11_disappear180",
+  "historical_public_score": 0.898,
+  "historical_submission_reference": "55950639",
+  "enabled": false,
+  "live_eligible": false,
+  "runner_kind": "support_pack",
+  "runner_options": {
+    "det_threshold": 0.965,
+    "det_tta_mode": "dihedral8",
+    "edge_threshold": 0.48,
+    "edge_min_threshold": 0.35,
+    "edge_topk_parents": 2,
+    "edge_topk_children": 2,
+    "edge_max_distance_um": 10.0,
+    "pool_kernel_um": 3.0,
+    "ilp_appearance_weight": 0.0,
+    "ilp_disappearance_weight": 1.8,
+    "ilp_division_weight": 0.5,
+    "gap_closing": true,
+    "gap_closing_max_total_distance_um": 10.0,
+    "gap_closing_reuse_existing_um": 2.5,
+    "gap_closing_max_added_fraction": 0.02,
+    "gap_closing_max_added_absolute": 1000,
+    "metric_probe": false
+  },
+  "required_kaggle_inputs": [
+    "pilkwang/biohub-tracking-support-pack-50ep-v1",
+    "yoikoarmor/biohub-last-call-postprocess-v1"
+  ],
+  "notes": "Historical parameters recovered from the plan. No data, models, account state or live submission instructions are embedded."
+}

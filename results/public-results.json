@@ -1,0 +1,216 @@
+{
+  "competition": "biohub-cell-tracking-during-development",
+  "evidence": "Historical session output; not re-queried against Kaggle during recovery.",
+  "observed_at": "2026-09-24T02:01:12.344Z",
+  "source_call_id": "call_Zn1m0Sem2vxzYll77kma5rb4",
+  "results": [
+    {
+      "candidate": "classical_peak_link__q995_d7",
+      "reference": "55257733",
+      "submitted_at": "2026-08-05T04:04:54.130000+00:00",
+      "status": "COMPLETE",
+      "public_score": null,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "classical_peak_link__q999_d10",
+      "reference": "55258616",
+      "submitted_at": "2026-08-05T04:41:31.867000+00:00",
+      "status": "COMPLETE",
+      "public_score": null,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "classical_peak_link__q995_d7__ids1",
+      "reference": "55270179",
+      "submitted_at": "2026-08-05T12:41:59.430000+00:00",
+      "status": "COMPLETE",
+      "public_score": null,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "classical_peak_link__q999_d10__ids1",
+      "reference": "55270868",
+      "submitted_at": "2026-08-05T13:12:39.973000+00:00",
+      "status": "COMPLETE",
+      "public_score": null,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "classical_peak_link__q999_d10__ids1__lf",
+      "reference": "55272073",
+      "submitted_at": "2026-08-05T14:00:08.827000+00:00",
+      "status": "COMPLETE",
+      "public_score": null,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "classical_peak_link__q999_d10__coverage_canary",
+      "reference": "55301126",
+      "submitted_at": "2026-08-06T14:42:42.006500+00:00",
+      "status": "COMPLETE",
+      "public_score": null,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "classical_peak_link__q999_d10__coverage_canary__crlf",
+      "reference": "55308117",
+      "submitted_at": "2026-08-06T22:35:57.457295+00:00",
+      "status": "COMPLETE",
+      "public_score": null,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "known_good_public_output__navaz__control",
+      "reference": "55308277",
+      "submitted_at": "2026-08-06T22:50:30.351317+00:00",
+      "status": "COMPLETE",
+      "public_score": null,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "embedded_sample_submission__control",
+      "reference": "55308442",
+      "submitted_at": "2026-08-06T23:08:52.930421+00:00",
+      "status": "COMPLETE",
+      "public_score": null,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "public_baseline_replay__navaz_v3",
+      "reference": "55308697",
+      "submitted_at": "2026-08-06T23:32:01.113000+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.9,
+      "kind": "public_baseline_replay_control"
+    },
+    {
+      "candidate": "classical_runner__q999_d10__recompute__zarr_fallback_v2",
+      "reference": "55311152",
+      "submitted_at": "2026-08-07T01:33:25.517834+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.054,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "cellmot_unet_transformer__det099_ilp",
+      "reference": "55339803",
+      "submitted_at": "2026-08-08T03:30:11.187000+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.875,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "cellmot_unet_transformer__det0965_ilp",
+      "reference": "55340025",
+      "submitted_at": "2026-08-08T03:44:24.780000+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.876,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "cellmot_community_metric_probe__v5_tta_rescue",
+      "reference": "55743492",
+      "submitted_at": "2026-08-24T12:59:46.313000+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.884,
+      "kind": "metric_probe"
+    },
+    {
+      "candidate": "cellmot_community_metric_probe__v7_edge_048_tta_rescue",
+      "reference": "55743945",
+      "submitted_at": "2026-08-24T13:00:32.404598+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.885,
+      "kind": "metric_probe"
+    },
+    {
+      "candidate": "cellmot_community_clean__v5_tta_rescue_clean",
+      "reference": "55744981",
+      "submitted_at": "2026-08-24T14:04:21.053000+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.884,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "cellmot_community_clean__v7_edge_048_tta_rescue_clean",
+      "reference": "55745396",
+      "submitted_at": "2026-08-24T14:05:47.707062+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.885,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "cellmot_community_h9__v8_children025",
+      "reference": "55914909",
+      "submitted_at": "2026-08-31T11:46:25.901564+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.884,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "cellmot_community_h9__v9_children035",
+      "reference": "55915377",
+      "submitted_at": "2026-08-31T11:46:25.903025+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.895,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "cellmot_community_h9__v10_edge045",
+      "reference": "55948192",
+      "submitted_at": "2026-09-01T21:17:34.106145+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.896,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "cellmot_community_h9__v10_edge055",
+      "reference": "55948395",
+      "submitted_at": "2026-09-01T21:17:34.108181+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.896,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "cellmot_community_h9__v11_disappear100",
+      "reference": "55950360",
+      "submitted_at": "2026-09-01T23:59:58.502658+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.891,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "cellmot_community_h9__v11_disappear180",
+      "reference": "55950639",
+      "submitted_at": "2026-09-01T23:59:58.504306+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.898,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "cellmot_community_h9__v12_division025",
+      "reference": "55960885",
+      "submitted_at": "2026-09-02T11:44:21.156506+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.894,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "cellmot_community_h9__v12_division100",
+      "reference": "55961193",
+      "submitted_at": "2026-09-02T11:44:21.157819+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.888,
+      "kind": "own_solution"
+    },
+    {
+      "candidate": "cellmot_community_h9__v13_edge030",
+      "reference": "55980843",
+      "submitted_at": "2026-09-03T11:54:21.685691+00:00",
+      "status": "COMPLETE",
+      "public_score": 0.897,
+      "kind": "own_solution"
+    }
+  ]
+}

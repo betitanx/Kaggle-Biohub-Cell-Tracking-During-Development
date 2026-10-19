@@ -1,0 +1,672 @@
+{
+  "competition": "biohub-cell-tracking-during-development",
+  "submission_mode": "notebook",
+  "notebook_payload_mode": "runner",
+  "notebook_dataset": "your-kaggle-user/biohub-cell-candidates",
+  "daily_submission_limit": 5,
+  "max_submissions_per_cycle": 2,
+  "expected_timepoints": 100,
+  "expected_datasets": [
+    "44b6_0113de3b",
+    "44b6_0b24845f",
+    "6bba_05b6850b",
+    "6bba_05db0fb1"
+  ],
+  "default_timeout_seconds": 3600,
+  "adaptive": {
+    "enabled": false,
+    "max_proposals_per_cycle": 2
+  },
+  "experiments": [
+    {
+      "name": "smoke_baseline",
+      "family": "smoke",
+      "enabled": true,
+      "live_eligible": false,
+      "command": [
+        "${PYTHON}",
+        "-m",
+        "biohub_lab.demo_candidate",
+        "--run-dir",
+        "${RUN_DIR}",
+        "--variant",
+        "baseline"
+      ],
+      "hypothesis": "O contrato do artefato e o loop de ranking são reproduzíveis.",
+      "tags": [
+        "smoke",
+        "contract"
+      ],
+      "expected_minutes": 1,
+      "timeout_seconds": 30
+    },
+    {
+      "name": "smoke_weak_ensemble",
+      "family": "smoke",
+      "enabled": true,
+      "live_eligible": false,
+      "command": [
+        "${PYTHON}",
+        "-m",
+        "biohub_lab.demo_candidate",
+        "--run-dir",
+        "${RUN_DIR}",
+        "--variant",
+        "weak_ensemble"
+      ],
+      "hypothesis": "Uma hipótese menos específica pode manter score fora da amostra.",
+      "tags": [
+        "smoke",
+        "weakness"
+      ],
+      "expected_minutes": 1,
+      "timeout_seconds": 30
+    },
+    {
+      "name": "synthetic_3d_quality_gate",
+      "family": "synthetic_quality",
+      "enabled": false,
+      "live_eligible": false,
+      "command": [
+        "${PYTHON}",
+        "-m",
+        "biohub_lab.synthetic_benchmark",
+        "--run-dir",
+        "${RUN_DIR}"
+      ],
+      "hypothesis": "Uma sequência 3D+tempo controlada deve detectar nós e arestas, além de tornar explícita a perda de divisões do linking one-to-one.",
+      "tags": [
+        "synthetic",
+        "quality-gate",
+        "division-ablation"
+      ],
+      "expected_minutes": 1,
+      "timeout_seconds": 60
+    },
+    {
+      "name": "classical_peak_link",
+      "family": "classical",
+      "enabled": false,
+      "command": [
+        "${PYTHON}",
+        "-m",
+        "biohub_lab.classical_candidate",
+        "--data-dir",
+        "${TEST_DATA_DIR}",
+        "--run-dir",
+        "${RUN_DIR}",
+        "--baseline-root",
+        "${CELL_TRACKING_ROOT}",
+        "--validation-data-dir",
+        "${DATA_DIR}",
+        "--evaluate-gt-dir",
+        "${DATA_DIR}",
+        "--holdout-data-dir",
+        "${HOLDOUT_DATA_DIR}",
+        "--holdout-gt-dir",
+        "${HOLDOUT_DATA_DIR}",
+        "--workers",
+        "4"
+      ],
+      "hypothesis": "Máximos locais em escala física e linking greedy podem formar uma referência simples e menos específica para comparar generalização.",
+      "tags": [
+        "classical",
+        "ome-zarr",
+        "physical-linking",
+        "proposal-grid"
+      ],
+      "expected_minutes": 45,
+      "timeout_seconds": 14400,
+      "requires": [
+        "TEST_DATA_DIR",
+        "DATA_DIR",
+        "HOLDOUT_DATA_DIR",
+        "CELL_TRACKING_ROOT",
+        "numpy",
+        "scipy",
+        "zarr",
+        "tracksdata"
+      ],
+      "variants": [
+        {
+          "name": "q990_d5",
+          "args": [
+            "--quantile",
+            "0.990",
+            "--max-link-distance-um",
+            "5.0"
+          ]
+        },
+        {
+          "name": "q995_d7",
+          "args": [
+            "--quantile",
+            "0.995",
+            "--max-link-distance-um",
+            "7.0"
+          ]
+        },
+        {
+          "name": "q999_d10",
+          "args": [
+            "--quantile",
+            "0.999",
+            "--max-link-distance-um",
+            "10.0"
+          ]
+        },
+        {
+          "name": "q999_d10_coverage",
+          "args": [
+            "--quantile",
+            "0.999",
+            "--max-link-distance-um",
+            "10.0",
+            "--ensure-timepoint-coverage"
+          ]
+        }
+      ],
+      "adaptive_variants": [
+        {
+          "name": "q980_d4",
+          "direction": "weaker",
+          "args": [
+            "--quantile",
+            "0.980",
+            "--max-link-distance-um",
+            "4.0"
+          ]
+        },
+        {
+          "name": "q985_d6",
+          "direction": "weaker",
+          "args": [
+            "--quantile",
+            "0.985",
+            "--max-link-distance-um",
+            "6.0"
+          ]
+        },
+        {
+          "name": "q997_d5",
+          "direction": "precision",
+          "args": [
+            "--quantile",
+            "0.997",
+            "--max-link-distance-um",
+            "5.0"
+          ]
+        },
+        {
+          "name": "q999_d12",
+          "direction": "precision",
+          "args": [
+            "--quantile",
+            "0.999",
+            "--max-link-distance-um",
+            "12.0"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "classical_division_aware",
+      "family": "topology_aware",
+      "enabled": false,
+      "live_eligible": false,
+      "command": [
+        "${PYTHON}",
+        "-m",
+        "biohub_lab.classical_candidate",
+        "--data-dir",
+        "${TEST_DATA_DIR}",
+        "--run-dir",
+        "${RUN_DIR}",
+        "--baseline-root",
+        "${CELL_TRACKING_ROOT}",
+        "--validation-data-dir",
+        "${DATA_DIR}",
+        "--evaluate-gt-dir",
+        "${DATA_DIR}",
+        "--holdout-data-dir",
+        "${HOLDOUT_DATA_DIR}",
+        "--holdout-gt-dir",
+        "${HOLDOUT_DATA_DIR}",
+        "--infer-divisions"
+      ],
+      "hypothesis": "Após o matching one-to-one, um segundo link só deve ser adicionado quando distância entre irmãs e midpoint do parent forem biologicamente plausíveis.",
+      "tags": [
+        "public-lead",
+        "division-gating",
+        "midpoint",
+        "ilp-ablation"
+      ],
+      "expected_minutes": 60,
+      "timeout_seconds": 14400,
+      "requires": [
+        "TEST_DATA_DIR",
+        "DATA_DIR",
+        "HOLDOUT_DATA_DIR",
+        "CELL_TRACKING_ROOT",
+        "numpy",
+        "scipy",
+        "zarr",
+        "tracksdata"
+      ],
+      "variants": [
+        {
+          "name": "div_d3_s5",
+          "args": [
+            "--midpoint-tolerance-um",
+            "3.0",
+            "--sister-max-distance-um",
+            "5.0"
+          ]
+        },
+        {
+          "name": "div_d5_s6",
+          "args": [
+            "--midpoint-tolerance-um",
+            "5.0",
+            "--sister-max-distance-um",
+            "6.0"
+          ]
+        }
+      ],
+      "adaptive_variants": [
+        {
+          "name": "div_wide",
+          "direction": "weaker",
+          "args": [
+            "--midpoint-tolerance-um",
+            "7.0",
+            "--sister-max-distance-um",
+            "8.0"
+          ]
+        },
+        {
+          "name": "div_tight",
+          "direction": "precision",
+          "args": [
+            "--midpoint-tolerance-um",
+            "2.0",
+            "--sister-max-distance-um",
+            "4.0"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "classical_clean_graph",
+      "family": "postprocess",
+      "enabled": false,
+      "live_eligible": false,
+      "command": [
+        "${PYTHON}",
+        "-m",
+        "biohub_lab.classical_candidate",
+        "--data-dir",
+        "${TEST_DATA_DIR}",
+        "--run-dir",
+        "${RUN_DIR}",
+        "--baseline-root",
+        "${CELL_TRACKING_ROOT}",
+        "--validation-data-dir",
+        "${DATA_DIR}",
+        "--evaluate-gt-dir",
+        "${DATA_DIR}",
+        "--holdout-data-dir",
+        "${HOLDOUT_DATA_DIR}",
+        "--holdout-gt-dir",
+        "${HOLDOUT_DATA_DIR}",
+        "--filter-isolated-nodes"
+      ],
+      "hypothesis": "Remover nós completamente isolados reduz falsos positivos sem mexer em tracks conectados, mas precisa ser validado contra células reais de um único frame.",
+      "tags": [
+        "postprocess",
+        "isolated-nodes",
+        "false-positive-filter",
+        "weakness-ablation"
+      ],
+      "expected_minutes": 50,
+      "timeout_seconds": 14400,
+      "requires": [
+        "TEST_DATA_DIR",
+        "DATA_DIR",
+        "HOLDOUT_DATA_DIR",
+        "CELL_TRACKING_ROOT",
+        "numpy",
+        "scipy",
+        "zarr",
+        "tracksdata"
+      ],
+      "variants": [
+        {
+          "name": "clean_q995",
+          "args": [
+            "--quantile",
+            "0.995"
+          ]
+        },
+        {
+          "name": "clean_q999",
+          "args": [
+            "--quantile",
+            "0.999"
+          ]
+        }
+      ],
+      "adaptive_variants": [
+        {
+          "name": "clean_q985",
+          "direction": "weaker",
+          "args": [
+            "--quantile",
+            "0.985"
+          ]
+        },
+        {
+          "name": "clean_q997",
+          "direction": "precision",
+          "args": [
+            "--quantile",
+            "0.997"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "cellmot_unet_transformer",
+      "family": "deep_baseline",
+      "enabled": false,
+      "command": [
+        "${CELL_TRACKING_PYTHON}",
+        "-m",
+        "biohub_lab.cellmot_candidate",
+        "--baseline-root",
+        "${CELL_TRACKING_ROOT}",
+        "--data-dir",
+        "${TEST_DATA_DIR}",
+        "--run-dir",
+        "${RUN_DIR}",
+        "--validation-data-dir",
+        "${DATA_DIR}",
+        "--evaluate-gt-dir",
+        "${DATA_DIR}",
+        "--holdout-data-dir",
+        "${HOLDOUT_DATA_DIR}",
+        "--holdout-gt-dir",
+        "${HOLDOUT_DATA_DIR}",
+        "--split",
+        "0",
+        "--method",
+        "unet_transformer",
+        "--support-pack-dir",
+        "${BIOHUB_SUPPORT_PACK_DIR}",
+        "--det-threshold",
+        "0.965",
+        "--pool-kernel-um",
+        "3.0",
+        "--ilp-appearance-weight",
+        "0.0",
+        "--ilp-disappearance-weight",
+        "1.4",
+        "--ilp-division-weight",
+        "1.0",
+        "--use-ilp"
+      ],
+      "notebook_runner_kind": "support_pack",
+      "notebook_runner_det_threshold": 0.965,
+      "notebook_runner_options": {
+        "det_threshold": 0.965,
+        "edge_threshold": 0.5,
+        "ilp_appearance_weight": 0.0,
+        "ilp_disappearance_weight": 1.4,
+        "ilp_division_weight": 1.0,
+        "pool_kernel_um": 3.0
+      },
+      "notebook_expected_timepoints": 100,
+      "notebook_additional_dataset_sources": [
+        "pilkwang/biohub-tracking-support-pack-50ep-v1"
+      ],
+      "hypothesis": "Detecção temporal e transformer de linking melhoram o Jaccard de arestas sob supervisão esparsa.",
+      "tags": [
+        "official-baseline",
+        "3d-unet",
+        "transformer"
+      ],
+      "expected_minutes": 120,
+      "timeout_seconds": 14400,
+      "requires": [
+        "CELL_TRACKING_PYTHON",
+        "CELL_TRACKING_ROOT",
+        "BIOHUB_SUPPORT_PACK_DIR",
+        "TEST_DATA_DIR",
+        "DATA_DIR",
+        "HOLDOUT_DATA_DIR"
+      ],
+      "variants": [
+        {
+          "name": "det0965_ilp",
+          "args": []
+        },
+        {
+          "name": "det099_ilp",
+          "args": [
+            "--det-threshold",
+            "0.99"
+          ],
+          "overrides": {
+            "notebook_runner_det_threshold": 0.99
+          }
+        }
+      ],
+      "adaptive_variants": [
+        {
+          "name": "det090",
+          "direction": "weaker",
+          "args": [
+            "--det-threshold",
+            "0.90"
+          ]
+        },
+        {
+          "name": "det098",
+          "direction": "precision",
+          "args": [
+            "--det-threshold",
+            "0.98"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "ultrack_multi_hypothesis",
+      "family": "global_tracker",
+      "enabled": false,
+      "command": [
+        "${CELL_TRACKING_PYTHON}",
+        "-m",
+        "biohub_lab.ultrack_candidate",
+        "--data-dir",
+        "${TEST_DATA_DIR}",
+        "--labels-dir",
+        "${ULTRACK_LABELS_DIR}",
+        "--run-dir",
+        "${RUN_DIR}",
+        "--validation-data-dir",
+        "${DATA_DIR}",
+        "--validation-labels-dir",
+        "${ULTRACK_VALIDATION_LABELS_DIR}",
+        "--evaluate-gt-dir",
+        "${DATA_DIR}",
+        "--holdout-data-dir",
+        "${HOLDOUT_DATA_DIR}",
+        "--holdout-labels-dir",
+        "${ULTRACK_HOLDOUT_LABELS_DIR}",
+        "--holdout-gt-dir",
+        "${HOLDOUT_DATA_DIR}",
+        "--baseline-root",
+        "${CELL_TRACKING_ROOT}"
+      ],
+      "hypothesis": "Consistência temporal e solver global sobre labels candidatos supera uma única segmentação rígida.",
+      "tags": [
+        "ultrack",
+        "zebrafish",
+        "multi-hypothesis",
+        "labels-ome-zarr"
+      ],
+      "expected_minutes": 180,
+      "timeout_seconds": 14400,
+      "requires": [
+        "CELL_TRACKING_PYTHON",
+        "CELL_TRACKING_ROOT",
+        "TEST_DATA_DIR",
+        "DATA_DIR",
+        "HOLDOUT_DATA_DIR",
+        "ULTRACK_LABELS_DIR",
+        "ULTRACK_VALIDATION_LABELS_DIR",
+        "ULTRACK_HOLDOUT_LABELS_DIR"
+      ],
+      "variants": [
+        {
+          "name": "frontier0_d10",
+          "args": [
+            "--min-frontier",
+            "0.0",
+            "--max-link-distance-um",
+            "10.0"
+          ]
+        },
+        {
+          "name": "frontier05_d10",
+          "args": [
+            "--min-frontier",
+            "0.5",
+            "--max-link-distance-um",
+            "10.0"
+          ]
+        },
+        {
+          "name": "frontier0_d15",
+          "args": [
+            "--min-frontier",
+            "0.0",
+            "--max-link-distance-um",
+            "15.0"
+          ]
+        }
+      ],
+      "adaptive_variants": [
+        {
+          "name": "frontier0_d20",
+          "direction": "weaker",
+          "args": [
+            "--min-frontier",
+            "0.0",
+            "--max-link-distance-um",
+            "20.0"
+          ]
+        },
+        {
+          "name": "frontier08_d8",
+          "direction": "precision",
+          "args": [
+            "--min-frontier",
+            "0.8",
+            "--max-link-distance-um",
+            "8.0"
+          ]
+        }
+      ]
+    },
+    {
+      "name": "detector3d_external",
+      "family": "detector_tracker",
+      "enabled": false,
+      "command": [
+        "${CELL_TRACKING_PYTHON}",
+        "-m",
+        "biohub_lab.external_candidate",
+        "--detector",
+        "cellpose",
+        "--data-dir",
+        "${TEST_DATA_DIR}",
+        "--run-dir",
+        "${RUN_DIR}",
+        "--validation-data-dir",
+        "${DATA_DIR}",
+        "--evaluate-gt-dir",
+        "${DATA_DIR}",
+        "--holdout-data-dir",
+        "${HOLDOUT_DATA_DIR}",
+        "--holdout-gt-dir",
+        "${HOLDOUT_DATA_DIR}",
+        "--baseline-root",
+        "${CELL_TRACKING_ROOT}"
+      ],
+      "hypothesis": "Um detector 3D generalista pode aumentar recall sem impor topologia de tracking.",
+      "tags": [
+        "cellpose",
+        "stardist",
+        "3d"
+      ],
+      "expected_minutes": 240,
+      "timeout_seconds": 14400,
+      "requires": [
+        "CELL_TRACKING_PYTHON",
+        "CELL_TRACKING_ROOT",
+        "TEST_DATA_DIR",
+        "DATA_DIR",
+        "HOLDOUT_DATA_DIR"
+      ],
+      "variants": [
+        {
+          "name": "cp_default",
+          "args": []
+        },
+        {
+          "name": "cp_recall",
+          "args": [
+            "--cellprob-threshold",
+            "-0.2",
+            "--max-link-distance-um",
+            "6.0"
+          ]
+        },
+        {
+          "name": "cp_precision",
+          "args": [
+            "--cellprob-threshold",
+            "0.3",
+            "--max-link-distance-um",
+            "5.0"
+          ]
+        }
+      ],
+      "adaptive_variants": [
+        {
+          "name": "cp_weaker",
+          "direction": "weaker",
+          "args": [
+            "--cellprob-threshold",
+            "-0.4",
+            "--max-link-distance-um",
+            "7.0"
+          ]
+        },
+        {
+          "name": "cp_tight",
+          "direction": "precision",
+          "args": [
+            "--cellprob-threshold",
+            "0.5",
+            "--max-link-distance-um",
+            "4.0"
+          ]
+        }
+      ]
+    }
+  ],
+  "require_all_candidates": true
+}

@@ -1,0 +1,63 @@
+{
+  "competition": "biohub-cell-tracking-during-development",
+  "submission_mode": "notebook",
+  "notebook_payload_mode": "runner",
+  "notebook_dataset": "your-kaggle-user/biohub-cell-candidates",
+  "daily_submission_limit": 5,
+  "max_submissions_per_cycle": 1,
+  "expected_timepoints": 100,
+  "expected_datasets": [
+    "44b6_0113de3b",
+    "44b6_0b24845f",
+    "6bba_05b6850b",
+    "6bba_05db0fb1"
+  ],
+  "adaptive": {
+    "enabled": false,
+    "max_proposals_per_cycle": 0
+  },
+  "experiments": [
+    {
+      "name": "support_pack_canary",
+      "family": "deep_baseline",
+      "enabled": false,
+      "live_eligible": false,
+      "notebook_runner_kind": "support_pack",
+      "notebook_expected_timepoints": null,
+      "notebook_additional_dataset_sources": [
+        "pilkwang/biohub-tracking-support-pack-50ep-v1"
+      ],
+      "command": [
+        "${CELL_TRACKING_PYTHON}",
+        "-m",
+        "biohub_lab.cellmot_candidate",
+        "--baseline-root",
+        "${CELL_TRACKING_ROOT}",
+        "--data-dir",
+        "${TEST_DATA_DIR}",
+        "--run-dir",
+        "${RUN_DIR}",
+        "--method",
+        "unet_transformer",
+        "--support-pack-dir",
+        "${BIOHUB_SUPPORT_PACK_DIR}"
+      ],
+      "hypothesis": "O Support Pack público executa de ponta a ponta e produz GEFF/CSV estruturalmente válido em Python 3.11 remoto.",
+      "tags": [
+        "canary",
+        "support-pack",
+        "unet",
+        "transformer",
+        "ilp"
+      ],
+      "timeout_seconds": 7200,
+      "requires": [
+        "CELL_TRACKING_PYTHON",
+        "CELL_TRACKING_ROOT",
+        "BIOHUB_SUPPORT_PACK_DIR",
+        "TEST_DATA_DIR"
+      ]
+    }
+  ],
+  "require_all_candidates": true
+}

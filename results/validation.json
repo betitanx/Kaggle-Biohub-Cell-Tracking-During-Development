@@ -1,0 +1,27 @@
+{
+  "checked_at": "2026-10-19T13:08:14.593712+00:00",
+  "python": "3.12.14",
+  "platform": "Darwin-arm64",
+  "verification_packages": {
+    "pytest": "9.1.1",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1"
+  },
+  "python_files_parsed": 94,
+  "tests": {
+    "total": 223,
+    "passed": 221,
+    "failed": 0,
+    "skipped": 2,
+    "skipped_tests": [
+      "test_reads_a_zarr_v3_frame_without_importing_zarr",
+      "test_classical_runner_executes_against_a_local_ome_zarr"
+    ]
+  },
+  "generated_notebook_syntax": "passed",
+  "upstream_license_packaging": "passed",
+  "synthetic_cli_runs_completed": 2,
+  "synthetic_ranking": "passed",
+  "synthetic_csv_topology_validation": "passed",
+  "scope": "Software and synthetic verification only. No historical dataset/GPU rerun, new Kaggle score, or live submission."
+}

@@ -1,0 +1,128 @@
+{
+  "competition": "biohub-cell-tracking-during-development",
+  "submission_mode": "notebook",
+  "notebook_payload_mode": "runner",
+  "notebook_enable_gpu": true,
+  "notebook_machine_shape": "NvidiaTeslaT4",
+  "notebook_dataset": "your-kaggle-user/biohub-cell-candidates",
+  "daily_submission_limit": 5,
+  "max_submissions_per_cycle": 2,
+  "expected_timepoints": 100,
+  "expected_datasets": [
+    "44b6_0113de3b",
+    "44b6_0b24845f",
+    "6bba_05b6850b",
+    "6bba_05db0fb1"
+  ],
+  "default_timeout_seconds": 14400,
+  "adaptive": {
+    "enabled": false,
+    "max_proposals_per_cycle": 0
+  },
+  "experiments": [
+    {
+      "name": "cellmot_unet_transformer",
+      "family": "deep_baseline",
+      "enabled": false,
+      "live_eligible": false,
+      "command": [
+        "${CELL_TRACKING_PYTHON}",
+        "-m",
+        "biohub_lab.cellmot_candidate",
+        "--baseline-root",
+        "${CELL_TRACKING_ROOT}",
+        "--data-dir",
+        "${TEST_DATA_DIR}",
+        "--run-dir",
+        "${RUN_DIR}",
+        "--validation-data-dir",
+        "${DATA_DIR}",
+        "--evaluate-gt-dir",
+        "${DATA_DIR}",
+        "--holdout-data-dir",
+        "${HOLDOUT_DATA_DIR}",
+        "--holdout-gt-dir",
+        "${HOLDOUT_DATA_DIR}",
+        "--split",
+        "0",
+        "--method",
+        "unet_transformer",
+        "--support-pack-dir",
+        "${BIOHUB_SUPPORT_PACK_DIR}",
+        "--det-threshold",
+        "0.965",
+        "--det-tta-mode",
+        "flip4",
+        "--edge-threshold",
+        "0.5",
+        "--edge-min-threshold",
+        "0.0",
+        "--edge-topk-parents",
+        "0",
+        "--edge-max-distance-um",
+        "0.0",
+        "--pool-kernel-um",
+        "3.0",
+        "--ilp-appearance-weight",
+        "0.0",
+        "--ilp-disappearance-weight",
+        "1.4",
+        "--ilp-division-weight",
+        "1.0",
+        "--use-ilp"
+      ],
+      "notebook_runner_kind": "support_pack",
+      "notebook_runner_det_threshold": 0.965,
+      "notebook_runner_options": {
+        "det_threshold": 0.965,
+        "det_tta_mode": "flip4",
+        "edge_threshold": 0.5,
+        "edge_min_threshold": 0.0,
+        "edge_topk_parents": 0,
+        "edge_max_distance_um": 0.0,
+        "ilp_appearance_weight": 0.0,
+        "ilp_disappearance_weight": 1.4,
+        "ilp_division_weight": 1.0,
+        "pool_kernel_um": 3.0
+      },
+      "notebook_expected_timepoints": 100,
+      "notebook_additional_dataset_sources": [
+        "pilkwang/biohub-tracking-support-pack-50ep-v1"
+      ],
+      "hypothesis": "Detecção temporal e transformer de linking melhoram o Jaccard de arestas sob supervisão esparsa.",
+      "tags": [
+        "official-baseline",
+        "3d-unet",
+        "transformer",
+        "recovery-cycle"
+      ],
+      "expected_minutes": 120,
+      "timeout_seconds": 14400,
+      "requires": [
+        "CELL_TRACKING_PYTHON",
+        "CELL_TRACKING_ROOT",
+        "BIOHUB_SUPPORT_PACK_DIR",
+        "TEST_DATA_DIR",
+        "DATA_DIR",
+        "HOLDOUT_DATA_DIR"
+      ],
+      "variants": [
+        {
+          "name": "det0965_ilp",
+          "args": []
+        },
+        {
+          "name": "det099_ilp",
+          "args": [
+            "--det-threshold",
+            "0.99"
+          ],
+          "overrides": {
+            "notebook_runner_det_threshold": 0.99
+          }
+        }
+      ]
+    }
+  ],
+  "require_all_candidates": true
+}

@@ -1,0 +1,59 @@
+{
+  "competition": "biohub-cell-tracking-during-development",
+  "submission_mode": "notebook",
+  "notebook_dataset": "your-kaggle-user/biohub-cell-candidates",
+  "notebook_payload_mode": "runner",
+  "daily_submission_limit": 5,
+  "max_submissions_per_cycle": 1,
+  "expected_timepoints": 100,
+  "expected_datasets": [
+    "44b6_0113de3b",
+    "44b6_0b24845f",
+    "6bba_05b6850b",
+    "6bba_05db0fb1"
+  ],
+  "adaptive": {
+    "enabled": false,
+    "max_proposals_per_cycle": 0
+  },
+  "experiments": [
+    {
+      "name": "classical_peak_link__q999_d10__coverage_canary",
+      "family": "classical",
+      "enabled": false,
+      "live_eligible": false,
+      "command": [
+        "${PYTHON}",
+        "-m",
+        "biohub_lab.classical_candidate",
+        "--data-dir",
+        "${TEST_DATA_DIR}",
+        "--run-dir",
+        "${RUN_DIR}",
+        "--workers",
+        "4",
+        "--quantile",
+        "0.999",
+        "--max-link-distance-um",
+        "10.0",
+        "--ensure-timepoint-coverage"
+      ],
+      "hypothesis": "O candidato q999 com cobertura temporal completa produz um arquivo aceito pelo avaliador oficial.",
+      "tags": [
+        "canary",
+        "format",
+        "timepoint-coverage",
+        "classical"
+      ],
+      "timeout_seconds": 3600,
+      "requires": [
+        "TEST_DATA_DIR",
+        "numpy",
+        "scipy",
+        "zarr",
+        "tracksdata"
+      ]
+    }
+  ],
+  "require_all_candidates": true
+}

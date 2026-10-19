@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "biohub-cell-tracking-lab"
+version = "0.1.0"
+description = "Reproducible experiment control plane for Biohub cell tracking"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.optional-dependencies]
+kaggle = ["kaggle>=2.0"]
+ml = [
+    "numpy",
+    "scipy",
+    "zarr",
+    "torch",
+    "tracksdata",
+]
+candidates = [
+    "cellpose",
+    "ultrack",
+]
+cloud = [
+    "modal>=1.1,<2",
+]
+dev = [
+    "pytest>=8.4.2",
+]
+
+[project.scripts]
+biohub-lab = "biohub_lab.cli:main"
+
+[tool.setuptools]
+package-dir = {"" = "src"}
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-p", "no:napari"]
+pythonpath = ["."]
