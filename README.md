@@ -1,5 +1,7 @@
 # Kaggle Biohub Cell Tracking During Development
 
+![Biohub Cell Tracking During Development competition banner](docs/assets/competition-banner.png)
+
 A research laboratory for detecting and tracking cells in 3D time-lapse microscopy: reproducible candidate runs, graph validation, held-out evaluation, ablations, ranking, and explicit Kaggle submission controls.
 
 The submitted inference notebooks and execution instructions are available in [notebooks/](notebooks/README.md).
