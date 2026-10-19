@@ -30,7 +30,15 @@ def main() -> int:
         for file in (ROOT / folder).rglob('*.py'):
             ast.parse(file.read_text(encoding='utf-8'), filename=str(file.relative_to(ROOT)))
             checked += 1
-    ast.parse((ROOT / 'modal_app.py').read_text(), filename='modal_app.py')
+    archived_notebooks = []
+    for file in sorted((ROOT / 'notebooks').glob('*.ipynb')):
+        saved = json.loads(file.read_text())
+        for cell in saved['cells']:
+            if cell['cell_type'] == 'code':
+                if cell.get('outputs') or cell.get('execution_count') is not None:
+                    raise RuntimeError('Archived notebook contains execution state: ' + file.name)
+                compile(''.join(cell['source']), file.name, 'exec')
+        archived_notebooks.append(file.name)
     with tempfile.TemporaryDirectory(prefix='biohub-export-verify-') as temporary:
         temporary = Path(temporary)
         junit = temporary / 'tests.xml'
@@ -85,7 +93,8 @@ def main() -> int:
         'python': platform.python_version(),
         'platform': platform.system() + '-' + platform.machine(),
         'verification_packages': {name: importlib.metadata.version(name) for name in ('pytest', 'numpy', 'scipy')},
-        'python_files_parsed': checked + 1,
+        'python_files_parsed': checked,
+        'archived_notebooks_syntax': archived_notebooks,
         'tests': {'total': len(cases), 'passed': len(cases) - len(skips), 'failed': 0, 'skipped': len(skips), 'skipped_tests': skips},
         'generated_notebook_syntax': 'passed',
         'upstream_license_packaging': 'passed',

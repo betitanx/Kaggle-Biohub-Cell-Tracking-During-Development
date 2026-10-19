@@ -1,6 +1,24 @@
 # Experimental notebook — public recovery edition
 
-This notebook summarizes the scientific record recovered from the project history. Historical work spans August–September 2026. Recovery and software checks were performed on 19 October 2026. Kaggle scores below are preserved observations, not fresh API queries performed during recovery.
+This notebook summarizes the scientific record recovered from the project history. Historical work spans August–September 2026. Recovery and software checks were performed on 19 October 2026. The historical observations below are supplemented by the signed-in Kaggle review documented in the next section; this was browser verification, not a fresh API query or inference rerun.
+
+## Kaggle reconciliation — 19 October 2026
+
+The submission details and the competition's “Your Work” notebook list are accessible again. There are 17 successful scored submissions and nine scoring errors; the earlier ledger's `COMPLETE` status without a score must not be read as a successful scored result.
+
+| Variant | Public | Final/private | Selected for final evaluation |
+|---|---:|---:|---|
+| Public-baseline replay control, ref 55308697 | 0.90096 | 0.89586 | Yes |
+| Own H9 v11 disappearance 1.8, ref 55950639 | 0.89856 | 0.89217 | Yes |
+| Own H9 v13 edge floor 0.30, ref 55980843 | 0.89796 | 0.89259 | No |
+
+H9 v11 remains the best own public result. H9 v13 has the best own final/private score among submitted variants, but it was not selected for the official final evaluation. The selected control still has the highest final score in the account. This post-competition evidence changes neither the historical selection nor the old progress figure.
+
+Downloaded the original Version 1 notebooks `346635318` and `346992236`. Their code cells are preserved verbatim in `notebooks/`; outputs, execution state, and metadata are stripped. The only code difference is `edge_min_threshold=0.35` versus `0.30`. Preview runtimes were 1008.9 and 1203.7 seconds on T4 ×2. Both completed despite Gurobi-to-SCIP fallback warnings. No cloud run or new submission was started.
+
+The input description also clarifies a key contract: the four visible preview datasets are not the full hidden test set. Reruns replace them with approximately training-sized hidden data. Coverage validation must use the datasets actually discovered during each execution, not a fixed list of four names. See [notebook instructions](notebooks/README.md) and [verified evidence](results/kaggle-review.json).
+
+For public readability, removed six unused environment/canary/probe recipes, two recovery-only publication reports, and the unverified Modal launcher. Kept the core modules, tests, baseline source/license, experimental methods, and disabled configurations used by tests. Removed files remain recoverable from Git history and a private local backup.
 
 ## Task and experimental method
 
@@ -44,7 +62,7 @@ Adjusted local replay scores can exceed 1.0 and depend on split, annotation spar
 
 The source baseline, Ultrack, Cellpose, StarDist, TracksData, OpenResearch, and public Kaggle notebooks were examined as implementation references or possible experiment families. The public catalog in `config/public_solutions.json` is historical discovery evidence; listed scores are not reproduced results of this repository.
 
-Weights and Kaggle assets remain external. The best-own runner expects the support pack `pilkwang/biohub-tracking-support-pack-50ep-v1` and gap-closing input `yoikoarmor/biohub-last-call-postprocess-v1`. Their individual terms and access rules must be checked at acquisition time. No competition data, checkpoints, or third-party Kaggle notebook contents are redistributed in this export.
+Weights and Kaggle assets remain external. The best-own runner expects the support pack `pilkwang/biohub-tracking-support-pack-50ep-v1` and gap-closing input `yoikoarmor/biohub-last-call-postprocess-v1`. Their terms and access rules must be checked at acquisition time. No competition data, checkpoints, or third-party Kaggle notebook downloads are redistributed. The included original notebooks belong to this account and load the external inputs at execution time.
 
 ## Recovery boundary
 

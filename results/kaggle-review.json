@@ -1,0 +1,90 @@
+{
+  "competition": "biohub-cell-tracking-during-development",
+  "verified_on": "2026-10-19",
+  "evidence": "Signed-in Kaggle submissions details and original Version 1 notebook downloads. Code cells unchanged; outputs, execution state and metadata removed. No rerun.",
+  "control": {
+    "reference": "55308697",
+    "public_score": 0.90096,
+    "private_score": 0.89586,
+    "selected_for_final": true,
+    "kaggle_url": "https://www.kaggle.com/code/betitanx/biohub-public-baseline-replay-55308442?scriptVersionId=340673150"
+  },
+  "notebooks": [
+    {
+      "candidate": "cellmot_community_h9__v11_disappear180",
+      "reference": "55950639",
+      "notebook": "notebooks/best-own-h9-v11.ipynb",
+      "kaggle_url": "https://www.kaggle.com/code/betitanx/biohub-cellmot-community-h9-bcd08e-92d6acc4?scriptVersionId=346635318",
+      "script_version_id": 346635318,
+      "public_score": 0.89856,
+      "private_score": 0.89217,
+      "selected_for_final": true,
+      "kernel_runtime_seconds": 1008.9,
+      "source_sha256": "3a4e215bebb10078ddac920d91845a7fb26587a2f4672ae1dbb846b110966f7b",
+      "download_sha256": "9466c95d3a8c225d8b7d143bd83b6ae123b623e2a3a1a0d61f1cf0803391ad6f",
+      "dataset_version_ids": [
+        17804310,
+        18189029
+      ],
+      "runner_options": {
+        "det_threshold": 0.965,
+        "det_tta_mode": "dihedral8",
+        "edge_max_distance_um": 10.0,
+        "edge_min_threshold": 0.35,
+        "edge_threshold": 0.48,
+        "edge_topk_children": 2,
+        "edge_topk_parents": 2,
+        "gap_closing": true,
+        "gap_closing_max_added_absolute": 1000,
+        "gap_closing_max_added_fraction": 0.02,
+        "gap_closing_max_total_distance_um": 10.0,
+        "gap_closing_reuse_existing_um": 2.5,
+        "ilp_appearance_weight": 0.0,
+        "ilp_disappearance_weight": 1.8,
+        "ilp_division_weight": 0.5,
+        "metric_probe": false,
+        "metric_probe_forks": 5,
+        "metric_probe_max_components": 1400,
+        "pool_kernel_um": 3.0
+      }
+    },
+    {
+      "candidate": "cellmot_community_h9__v13_edge030",
+      "reference": "55980843",
+      "notebook": "notebooks/best-final-h9-v13.ipynb",
+      "kaggle_url": "https://www.kaggle.com/code/betitanx/biohub-cellmot-community-h9-c2f668-2ad019de?scriptVersionId=346992236",
+      "script_version_id": 346992236,
+      "public_score": 0.89796,
+      "private_score": 0.89259,
+      "selected_for_final": false,
+      "kernel_runtime_seconds": 1203.7,
+      "source_sha256": "61c1ad4b29e4466240dd4ea2102cda073da1e7f6ccf901ecb882a171dfc40754",
+      "download_sha256": "472d501a618aeea90b57e98713498fcacbc3074707145d41c2e236c11764c425",
+      "dataset_version_ids": [
+        17804310,
+        18189029
+      ],
+      "runner_options": {
+        "det_threshold": 0.965,
+        "det_tta_mode": "dihedral8",
+        "edge_max_distance_um": 10.0,
+        "edge_min_threshold": 0.3,
+        "edge_threshold": 0.48,
+        "edge_topk_children": 2,
+        "edge_topk_parents": 2,
+        "gap_closing": true,
+        "gap_closing_max_added_absolute": 1000,
+        "gap_closing_max_added_fraction": 0.02,
+        "gap_closing_max_total_distance_um": 10.0,
+        "gap_closing_reuse_existing_um": 2.5,
+        "ilp_appearance_weight": 0.0,
+        "ilp_disappearance_weight": 1.8,
+        "ilp_division_weight": 0.5,
+        "metric_probe": false,
+        "metric_probe_forks": 5,
+        "metric_probe_max_components": 1400,
+        "pool_kernel_um": 3.0
+      }
+    }
+  ]
+}

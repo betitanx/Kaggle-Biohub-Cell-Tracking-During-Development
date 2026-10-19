@@ -1,9 +1,0 @@
-{
-  "checked_at": "2026-10-19T13:08:15.687763+00:00",
-  "scope": "Exact staged files, excluding the generated publication-check and manifest reports themselves.",
-  "files_scanned": 124,
-  "total_bytes": 1474042,
-  "embedded_notebook_source_files_scanned": 0,
-  "findings": [],
-  "limitations": "Static pattern and allowlist checks are not a guarantee of absence of all secrets or runtime vulnerabilities. No competition data, GPU execution, cloud service, or new Kaggle score was tested."
-}

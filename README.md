@@ -2,22 +2,27 @@
 
 A research laboratory for detecting and tracking cells in 3D time-lapse microscopy: reproducible candidate runs, graph validation, held-out evaluation, ablations, ranking, and explicit Kaggle submission controls.
 
-This is a curated recovery of the completed project. The original working directory was unavailable; code and historical evidence were reconstructed from preserved development records. See [recovery notes](docs/RECOVERY.md) for the boundaries of that reconstruction.
+The original submitted inference notebooks are available in [notebooks/](notebooks/README.md). Part of the local laboratory was reconstructed from preserved development records; see [recovery notes](docs/RECOVERY.md).
 
 ## Results and scope
 
-| Historical result | Public score | Submission reference |
-|---|---:|---|
-| Best score in the account: replay of a public baseline, used as a control | 0.900 | 55308697 |
-| Best own pipeline variant: H9 v11, disappearance penalty 1.8 | 0.898 | 55950639 |
+Scores verified in the signed-in Kaggle submission details on **19 October 2026**. “Private” means the competition's final hidden-test score, not local validation.
 
-The control is a public-baseline replay and is not an original algorithm developed in this project. The historical record contains **28 local evaluations and 26 accepted Kaggle submission references**, for **54 evaluation/submission records**. These are not 54 unique architectures. Of the 26 references, 17 have numeric public scores and nine have no numeric score in the record. See [public results](results/public-results.json) and [the experimental notebook](lab.md).
+| Pipeline | Public score | Final/private score | Notebook |
+|---|---:|---:|---|
+| Public-baseline replay — account control, not an original model | **0.90096** | **0.89586** | [Kaggle control](https://www.kaggle.com/code/betitanx/biohub-public-baseline-replay-55308442?scriptVersionId=340673150) |
+| H9 v11 — best own public result | **0.89856** | 0.89217 | [Original notebook](notebooks/best-own-h9-v11.ipynb) |
+| H9 v13 — best own final/private result among submitted variants | 0.89796 | **0.89259** | [Original notebook](notebooks/best-final-h9-v13.ipynb) |
+
+The control and H9 v11 were selected for final evaluation. H9 v13 was **not selected**; its post-competition score is not the account's official final result. The two own notebooks differ only in `edge_min_threshold`: 0.35 versus 0.30. [Verified scores, source hashes, and provenance](results/kaggle-review.json).
+
+The historical record contains **28 local evaluations and 26 Kaggle submission references**, for **54 evaluation/submission records**, not 54 unique architectures. Kaggle shows 17 successful scored submissions and nine errors. [Historical public results](results/public-results.json) retain the earlier rounded observations; [lab.md](lab.md) describes the experiments and failures.
 
 The runtime estimate is **146 hours**, calculated conservatively from the owner's reported long runs: four runs of about 27 hours plus one of 38 hours. It is an estimate of execution time, not a measurement of hands-on effort or billed GPU time.
 
 ![Historical project progress](docs/assets/project-progress-snapshot.png)
 
-Local OOF/holdout/replay scores use different scopes and an adjusted local metric that can exceed 1.0. They should not be interpreted as Kaggle public scores. The image was recovered from the final reviewed historical preview; its source data and raw predictions were not all recovered.
+The historical figure uses rounded public scores. Local OOF/holdout/replay scores use different scopes and an adjusted metric that can exceed 1.0; they are not directly comparable with Kaggle scores. Its source data and raw predictions were not all recovered.
 
 ## Quick start
 
@@ -42,15 +47,19 @@ python -m biohub_lab.cli validate --submission tests/fixtures/submission.csv
 
 Only the synthetic smoke candidates are enabled in the public default configuration. Real-data candidates and live eligibility are disabled. The synthetic scores exercise the software contract and are not biological results.
 
-## Reproduce the best own configuration
+## Run the inference notebooks
 
-The historical H9 v11 parameters are preserved in [config/best-own-h9-v11.json](config/best-own-h9-v11.json). The generated [best-own notebook](notebooks/best-own-h9-v11.ipynb) is included, or you can regenerate it locally:
+Start with [notebooks/README.md](notebooks/README.md). Both included notebooks were downloaded from the actual submitted Version 1 runs. Code cells are unchanged; outputs and execution metadata were removed. Exact configurations are in [best-own-h9-v11.json](config/best-own-h9-v11.json) and [best-final-h9-v13.json](config/best-final-h9-v13.json).
+
+On Kaggle, attach the competition, the [support pack](https://www.kaggle.com/datasets/pilkwang/biohub-tracking-support-pack-50ep-v1), and the [gap-closing input](https://www.kaggle.com/datasets/yoikoarmor/biohub-last-call-postprocess-v1). Use a GPU and disable Internet. Historical preview runs used T4 ×2 and took approximately **16m49s** (v11) and **20m04s** (v13); these are not hidden-test runtime guarantees.
+
+For development, you can also generate a notebook from the currently recovered runner:
 
 ```bash
 python scripts/build_best_own_notebook.py --output outputs/best-own-h9-v11.ipynb
 ```
 
-This command writes a notebook; it does not upload or run it. To run it on Kaggle, attach the competition and the public inputs listed in that configuration using your own account and access permissions. Dataset licenses and competition rules apply separately. Models, images, labels, checkpoints, private kernels, and credentials are not bundled here. A rerun's score is not guaranteed to match the historical score.
+This command writes a regenerated notebook without uploading or executing it; it does not replace the original included notebook or prove byte-for-byte equivalence. Models, images, labels, checkpoints, and credentials are not bundled. Dataset licenses and competition rules apply separately. A rerun's score is not guaranteed to match the historical score.
 
 The notebook runner recomputes predictions from mounted competition inputs. The validation layer checks IDs, coverage, finite values, timepoints, edge direction, division degree, and graph topology. Historical scoring failures and their resolution are described in [lab.md](lab.md).
 
@@ -59,6 +68,7 @@ Run the complete lightweight release check with `python scripts/verify_public_re
 ## Repository guide
 
 - `src/biohub_lab/`: control plane, validation, metrics bridges, classical and deep-model adapters, notebook builders, and experimental postprocessing.
+- `notebooks/`: the two original, output-free submitted notebooks and execution instructions.
 - `tests/`: unit/regression tests and a small synthetic CSV fixture.
 - `config/`: sanitized, disabled real-data examples and the recorded best-own parameters.
 - `scripts/`: local utilities and optional explicit Kaggle/holdout launchers.
@@ -66,7 +76,9 @@ Run the complete lightweight release check with `python scripts/verify_public_re
 - `results/`: curated historical public-score evidence and recovery validation summaries.
 - `docs/`: recovery notes, architecture decisions, and the restored progress image.
 
-The H13 fine-tuning, H15 motion-consensus, H16 DeepCenter, and H17/H18 radius experiments are research code with different validation scopes; their inclusion does not establish public-score improvements. Optional ML integrations load externally supplied Python and model checkpoints. Use only reviewed, trusted sources and verified files. The historical Modal integration is included for reference and has not been revalidated against a live Modal service during recovery.
+The H13 fine-tuning, H15 motion-consensus, H16 DeepCenter, and H17/H18 radius experiments are research code with different validation scopes; their inclusion does not establish public-score improvements. Optional ML integrations load externally supplied Python and model checkpoints; use only reviewed, trusted inputs.
+
+Obsolete canary/probe recipes, environment templates, the unverified Modal launcher, and recovery-only publication reports were removed from the current tree. The previous snapshot remains in Git history; the scientific code, tests, and required baseline sources are retained.
 
 ## Provenance and attribution
 
