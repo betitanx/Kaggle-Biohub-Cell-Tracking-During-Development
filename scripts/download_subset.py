@@ -5,6 +5,7 @@ import argparse
 import json
 import re
 import shutil
+import stat
 import subprocess
 import tempfile
 import time
@@ -17,6 +18,41 @@ from biohub_lab.cloud_data import entries_for_prefix, parse_file_listing_page
 
 
 _NEXT_PAGE_RE = re.compile(r"Next Page Token = (.+)\n")
+
+
+def _validate_remote_path(value: Any, *, prefix: bool = False) -> str:
+    """Accept only unambiguous relative POSIX paths from untrusted listings."""
+
+    if not isinstance(value, str) or not value or "\\" in value or "\x00" in value:
+        raise ValueError("unsafe prefix or file name: {!r}".format(value))
+    path = value[:-1] if prefix and value.endswith("/") else value
+    parts = path.split("/")
+    if any(part in ("", ".", "..") or ":" in part for part in parts):
+        raise ValueError("unsafe prefix or file name: {!r}".format(value))
+    return path
+
+
+def _check_local_path(path: Path, *, directory: bool) -> None:
+    """Reject links (including dangling ones) before resolving any component."""
+
+    for component in [*reversed(path.parents), path]:
+        try:
+            mode = component.lstat().st_mode
+        except FileNotFoundError:
+            continue
+        if stat.S_ISLNK(mode):
+            raise ValueError("symlink in output path: {}".format(component))
+        is_directory = directory or component != path
+        if not (stat.S_ISDIR(mode) if is_directory else stat.S_ISREG(mode)):
+            raise ValueError("invalid output path type: {}".format(component))
+
+
+def _checked_destination(output_dir: Path, name: str) -> Path:
+    destination = output_dir / name
+    _check_local_path(destination, directory=False)
+    if not destination.resolve().is_relative_to(output_dir):
+        raise ValueError("destination escapes output directory: {!r}".format(name))
+    return destination
 
 
 def _run_kaggle(
@@ -103,28 +139,42 @@ def download_prefix(
 
     Files in a prefix are independent, so a bounded worker pool improves
     throughput while keeping each destination resumable and deterministic.
+    Output paths require physical, non-symlinked ancestors (on macOS, use
+    /private/var or /private/tmp instead of the /var or /tmp aliases).
+    Dry runs validate without creating output directories.
     """
 
-    output_dir = Path(output_dir).resolve()
-    output_dir.mkdir(parents=True, exist_ok=True)
     if workers < 1:
         raise ValueError("workers must be at least one")
     if timeout_seconds < 1:
         raise ValueError("timeout_seconds must be positive")
+    normalized = _validate_remote_path(prefix, prefix=True) + "/"
     if manifest_path is None:
         files = _list_prefix(competition, prefix, executable)
     else:
         files = entries_for_prefix(_load_manifest(Path(manifest_path)), prefix)
         if not files:
             raise FileNotFoundError("no manifest files matched prefix: {}".format(prefix))
+    # Validate every selected name before mkdir, temporary files or workers.
+    for item in files:
+        name = _validate_remote_path(item.get("name"))
+        if not name.startswith(normalized):
+            raise ValueError("file name is outside requested prefix: {!r}".format(name))
     total_bytes = sum(int(item.get("size", 0)) for item in files)
+    output_dir = Path(output_dir).absolute()
+    _check_local_path(output_dir, directory=True)
+    output_dir = output_dir.resolve()
+    for item in files:
+        _checked_destination(output_dir, item["name"])
     if dry_run:
         return {"prefix": prefix, "files": len(files), "bytes": total_bytes, "downloaded": 0}
+    output_dir.mkdir(parents=True, exist_ok=True)
 
     def download_one(item: Dict[str, Any]) -> bool:
-        name = str(item["name"])
-        destination = output_dir / name
+        name = item["name"]
+        destination = _checked_destination(output_dir, name)
         destination.parent.mkdir(parents=True, exist_ok=True)
+        _checked_destination(output_dir, name)
         expected_size = int(item.get("size", 0))
         if destination.is_file() and (expected_size <= 0 or destination.stat().st_size == expected_size):
             return False
@@ -133,9 +183,18 @@ def download_prefix(
             completed = _run_kaggle(command, timeout_seconds=timeout_seconds)
             if completed.returncode != 0:
                 raise RuntimeError("Kaggle file download failed for {}: {}".format(name, completed.stderr.strip()[-500:]))
-            candidates = [path for path in Path(temporary).iterdir() if path.is_file()]
+            _checked_destination(output_dir, name)
+            candidates = []
+            for path in Path(temporary).iterdir():
+                mode = path.lstat().st_mode
+                if stat.S_ISLNK(mode):
+                    raise ValueError("symlink in downloaded output: {}".format(path))
+                if stat.S_ISREG(mode):
+                    candidates.append(path)
             if len(candidates) != 1:
                 raise RuntimeError("expected one downloaded file for {}, found {}".format(name, len(candidates)))
+            # Best-effort recheck, not protection against hostile concurrent swaps.
+            _checked_destination(output_dir, name)
             shutil.move(str(candidates[0]), str(destination))
         if expected_size > 0 and destination.stat().st_size != expected_size:
             raise RuntimeError("size mismatch after downloading {}".format(name))
