@@ -52,23 +52,30 @@ def prepare_data_cache(
     cache_root: Path,
     workers: int = 4,
 ) -> Dict[str, Path]:
-    """Copy raw data once and recreate train/holdout links on local SSD.
+    """Copy data into a new cache without deleting any existing directory.
 
     The source Volume remains untouched.  The returned paths have the same
     layout expected by ``RemoteRunConfig`` and can be passed to candidates
     through environment variables.  The cache is deliberately scoped to an
-    explicit temporary directory owned by the current worker.
+    explicit new directory owned by the current worker. Choose a different
+    path for each run; existing caches are never implicitly cleared.
     """
 
     source_root = Path(source_root).resolve()
-    cache_root = Path(cache_root).resolve()
+    cache_root = Path(cache_root)
+    if cache_root.is_symlink():
+        raise ValueError("cache_root must not be a symlink")
+    cache_root = cache_root.resolve()
     if cache_root == Path("/") or len(cache_root.parts) < 3:
         raise ValueError("cache_root must be a narrow temporary directory")
-    if cache_root.is_symlink():
-        cache_root.unlink()
-    elif cache_root.exists():
-        shutil.rmtree(cache_root)
-    cache_root.mkdir(parents=True, exist_ok=True)
+    if cache_root.is_relative_to(source_root) or source_root.is_relative_to(cache_root):
+        raise ValueError("cache_root and source_root must not overlap")
+    for split in ("test", "train", "train_split", "holdout"):
+        if not (source_root / split).is_dir():
+            raise FileNotFoundError("staged data directory not found: {}".format(source_root / split))
+    if cache_root.exists():
+        raise FileExistsError("cache_root already exists; choose a new cache directory")
+    cache_root.mkdir(parents=True, exist_ok=False)
     _copy_tree(source_root / "test", cache_root / "test", workers=workers)
     _copy_tree(source_root / "train", cache_root / "train", workers=workers)
     _link_split(source_root, "train_split", cache_root / "train_split")

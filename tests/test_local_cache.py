@@ -2,11 +2,64 @@ import json
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 from biohub_lab.local_cache import prepare_data_cache
 
 
 class LocalCacheTests(unittest.TestCase):
+    def test_refuses_existing_cache_without_deleting_its_contents(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "source"
+            for split in ("test", "train", "train_split", "holdout"):
+                (root / split).mkdir(parents=True)
+            cache = Path(directory) / "cache"
+            cache.mkdir()
+            sentinel = cache / "keep.txt"
+            sentinel.write_text("keep", encoding="utf-8")
+            with patch("biohub_lab.local_cache.shutil.rmtree", side_effect=AssertionError("unsafe deletion")):
+                with self.assertRaises(FileExistsError):
+                    prepare_data_cache(root, cache)
+            self.assertEqual(sentinel.read_text(), "keep")
+
+    def test_refuses_cache_symlinks_including_dangling_links(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "source"
+            for split in ("test", "train", "train_split", "holdout"):
+                (root / split).mkdir(parents=True)
+            sentinel = root / "keep.txt"
+            sentinel.write_text("keep", encoding="utf-8")
+            for name, target in (("source-link", root), ("dangling-link", root / "missing")):
+                with self.subTest(name=name):
+                    link = Path(directory) / name
+                    link.symlink_to(target, target_is_directory=True)
+                    with patch("biohub_lab.local_cache.shutil.rmtree", side_effect=AssertionError("unsafe deletion")):
+                        with self.assertRaises(ValueError):
+                            prepare_data_cache(root, link)
+                    self.assertTrue(link.is_symlink())
+                    self.assertEqual(sentinel.read_text(), "keep")
+
+    def test_refuses_overlapping_source_and_cache_in_both_directions(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "source"
+            for split in ("test", "train", "train_split", "holdout"):
+                (root / split).mkdir(parents=True)
+            for cache in (root, root / "new-cache", root.parent):
+                with self.subTest(cache=cache):
+                    with patch("biohub_lab.local_cache.shutil.rmtree", side_effect=AssertionError("unsafe deletion")):
+                        with self.assertRaises(ValueError):
+                            prepare_data_cache(root, cache)
+            self.assertFalse((root / "new-cache").exists())
+
+    def test_validates_source_before_creating_cache(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory) / "source"
+            (root / "test").mkdir(parents=True)
+            cache = Path(directory) / "cache"
+            with self.assertRaises(FileNotFoundError):
+                prepare_data_cache(root, cache)
+            self.assertFalse(cache.exists())
+
     def test_copies_raw_data_and_recreates_split_links(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory) / "source"
