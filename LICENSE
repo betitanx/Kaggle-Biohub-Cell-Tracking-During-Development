@@ -1,0 +1,17 @@
+Copyright (c) 2026 betitanx
+All rights reserved.
+
+No general license to use, reproduce, modify, distribute, sublicense, or sell
+the original laboratory code or accompanying original documentation is
+granted by this repository. Contact the repository owner for permission.
+
+This notice does not override rights provided by applicable law or GitHub's
+platform terms, including viewing and forking on GitHub.
+
+Third-party materials are excluded from this notice and retain their own
+copyrights and terms. In particular, the organizer baseline under
+external/kaggle-cell-tracking-competition/ remains subject to its included
+BSD 3-Clause License. Competition data, external weights, and third-party
+images are not licensed by this notice.
+
+See LICENSE_INFO.md and THIRD_PARTY_NOTICES.md for scope and attribution.

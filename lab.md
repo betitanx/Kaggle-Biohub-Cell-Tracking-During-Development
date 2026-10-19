@@ -65,3 +65,5 @@ Weights and Kaggle assets remain external. The best-own runner expects the suppo
 ## Validation scope
 
 The repository includes experiment code, submitted inference notebooks, historical results, and software checks. Competition data, weights, credentials, operational account state, and raw predictions are not bundled. Lightweight validation covers tests, notebook syntax, synthetic runs, ranking, and graph topology; it does not establish a fresh end-to-end GPU reproduction of the leaderboard scores. Optional ML dependencies are not fully locked.
+
+Filesystem safety updates on 19 October 2026: cache preparation never removes existing paths; CSV conversion validates every name/destination and defaults to no overwrite; subset downloads reject unsafe names and symlinks before writes. Regression tests were observed failing before the fixes. The complete lightweight check passed with 362 tests, two optional-data skips, and five subtests. These changes do not modify the original submitted notebooks or establish new competition scores. See [safe usage](docs/SAFE_USAGE.md) and [changelog](CHANGELOG.md).

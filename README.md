@@ -1,6 +1,6 @@
 # Kaggle Biohub Cell Tracking During Development
 
-![Biohub Cell Tracking During Development competition banner](docs/assets/competition-banner.png)
+[![Biohub Cell Tracking During Development competition banner](docs/assets/competition-banner.png)](https://www.kaggle.com/competitions/biohub-cell-tracking-during-development)
 
 A research laboratory for detecting and tracking cells in 3D time-lapse microscopy: reproducible candidate runs, graph validation, held-out evaluation, ablations, ranking, and explicit Kaggle submission controls.
 
@@ -49,6 +49,8 @@ python -m biohub_lab.cli validate --submission tests/fixtures/submission.csv
 
 Only the synthetic smoke candidates are enabled in the public default configuration. Real-data candidates and live eligibility are disabled. The synthetic scores exercise the software contract and are not biological results.
 
+Before processing other people's files or launching remote jobs, read [safe usage](docs/SAFE_USAGE.md). Cache directories must be new; CSV conversion does not overwrite by default. Models and external Python inputs must come from trusted, verified sources.
+
 ## Run the inference notebooks
 
 Start with [notebooks/README.md](notebooks/README.md). Both included notebooks were downloaded from the actual submitted Version 1 runs. Code cells are unchanged; outputs and execution metadata were removed. Exact configurations are in [best-own-h9-v11.json](config/best-own-h9-v11.json) and [best-final-h9-v13.json](config/best-final-h9-v13.json).
@@ -65,7 +67,7 @@ This command writes a regenerated notebook without uploading or executing it; it
 
 The notebook runner recomputes predictions from mounted competition inputs. The validation layer checks IDs, coverage, finite values, timepoints, edge direction, division degree, and graph topology. Historical scoring failures and their resolution are described in [lab.md](lab.md).
 
-Run the complete lightweight release check with `python scripts/verify_public_release.py`. The recorded [validation report](results/validation.json) covers 221 passing tests, two skipped optional-data tests, notebook syntax, a synthetic two-candidate run, ranking, and topology validation. This check does not run the historical competition workload.
+Run the complete lightweight release check with `python scripts/verify_public_release.py`. The recorded [validation report](results/validation.json) covers 362 passing tests, two skipped optional-data tests, notebook syntax, a synthetic two-candidate run, ranking, and topology validation. This check does not run the historical competition workload.
 
 ## Repository guide
 
@@ -86,4 +88,4 @@ The organizer's [baseline](https://github.com/royerlab/kaggle-cell-tracking-comp
 
 The hypothesis-selection workflow was informed by [arXiv:2301.12987v4](https://arxiv.org/pdf/2301.12987v4), operationalized here through held-out generalization, controlled ablations, and complexity checks. Public competition discussions and notebooks were treated as leads to investigate, not as independently verified performance evidence.
 
-No blanket license has been selected for the laboratory code. The bundled upstream files retain their BSD license. See [LICENSE_INFO.md](LICENSE_INFO.md).
+Original laboratory contributions: **all rights reserved**, with no general reuse license ([LICENSE](LICENSE)). The bundled organizer baseline retains its BSD-3-Clause license; third-party images, data, and weights have separate terms. See [LICENSE_INFO.md](LICENSE_INFO.md) and [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
