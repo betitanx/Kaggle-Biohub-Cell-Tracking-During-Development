@@ -2,7 +2,7 @@
 
 A research laboratory for detecting and tracking cells in 3D time-lapse microscopy: reproducible candidate runs, graph validation, held-out evaluation, ablations, ranking, and explicit Kaggle submission controls.
 
-The original submitted inference notebooks are available in [notebooks/](notebooks/README.md). Part of the local laboratory was reconstructed from preserved development records; see [recovery notes](docs/RECOVERY.md).
+The submitted inference notebooks and execution instructions are available in [notebooks/](notebooks/README.md).
 
 ## Results and scope
 
@@ -22,11 +22,11 @@ The runtime estimate is **146 hours**, calculated conservatively from the owner'
 
 ![Historical project progress](docs/assets/project-progress-snapshot.png)
 
-The historical figure uses rounded public scores. Local OOF/holdout/replay scores use different scopes and an adjusted metric that can exceed 1.0; they are not directly comparable with Kaggle scores. Its source data and raw predictions were not all recovered.
+The historical figure uses rounded public scores. Local OOF/holdout/replay scores use different scopes and an adjusted metric that can exceed 1.0; they are not directly comparable with Kaggle scores.
 
 ## Quick start
 
-Python 3.11 or later is required. The recovery checks use Python 3.12.
+Python 3.11 or later is required. The validation checks use Python 3.12.
 
 ```bash
 python3 -m venv .venv
@@ -53,7 +53,7 @@ Start with [notebooks/README.md](notebooks/README.md). Both included notebooks w
 
 On Kaggle, attach the competition, the [support pack](https://www.kaggle.com/datasets/pilkwang/biohub-tracking-support-pack-50ep-v1), and the [gap-closing input](https://www.kaggle.com/datasets/yoikoarmor/biohub-last-call-postprocess-v1). Use a GPU and disable Internet. Historical preview runs used T4 ×2 and took approximately **16m49s** (v11) and **20m04s** (v13); these are not hidden-test runtime guarantees.
 
-For development, you can also generate a notebook from the currently recovered runner:
+For development, you can also generate a notebook from the local runner:
 
 ```bash
 python scripts/build_best_own_notebook.py --output outputs/best-own-h9-v11.ipynb
@@ -73,12 +73,10 @@ Run the complete lightweight release check with `python scripts/verify_public_re
 - `config/`: sanitized, disabled real-data examples and the recorded best-own parameters.
 - `scripts/`: local utilities and optional explicit Kaggle/holdout launchers.
 - `external/kaggle-cell-tracking-competition/`: the BSD-licensed source files needed by the baseline wrappers, with license and attribution preserved.
-- `results/`: curated historical public-score evidence and recovery validation summaries.
-- `docs/`: recovery notes, architecture decisions, and the restored progress image.
+- `results/`: historical score evidence and validation summaries.
+- `docs/`: architecture decisions and the project progress image.
 
 The H13 fine-tuning, H15 motion-consensus, H16 DeepCenter, and H17/H18 radius experiments are research code with different validation scopes; their inclusion does not establish public-score improvements. Optional ML integrations load externally supplied Python and model checkpoints; use only reviewed, trusted inputs.
-
-Obsolete canary/probe recipes, environment templates, the unverified Modal launcher, and recovery-only publication reports were removed from the current tree. The previous snapshot remains in Git history; the scientific code, tests, and required baseline sources are retained.
 
 ## Provenance and attribution
 
@@ -86,4 +84,4 @@ The organizer's [baseline](https://github.com/royerlab/kaggle-cell-tracking-comp
 
 The hypothesis-selection workflow was informed by [arXiv:2301.12987v4](https://arxiv.org/pdf/2301.12987v4), operationalized here through held-out generalization, controlled ablations, and complexity checks. Public competition discussions and notebooks were treated as leads to investigate, not as independently verified performance evidence.
 
-No blanket license has been selected for the original laboratory code in this recovery export. The bundled upstream files retain their BSD license. See [LICENSE_INFO.md](LICENSE_INFO.md).
+No blanket license has been selected for the laboratory code. The bundled upstream files retain their BSD license. See [LICENSE_INFO.md](LICENSE_INFO.md).
