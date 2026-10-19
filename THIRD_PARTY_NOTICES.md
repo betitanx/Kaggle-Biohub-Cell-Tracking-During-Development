@@ -4,9 +4,9 @@
 
 Source: https://github.com/royerlab/kaggle-cell-tracking-competition
 
-Fetched recovery commit: `075fc5f5a52d11077f9dc2b074644618f26939e2`.
+Upstream source commit: `075fc5f5a52d11077f9dc2b074644618f26939e2`.
 
-The relevant Python files under `external/kaggle-cell-tracking-competition/` are third-party source under the **BSD 3-Clause License**, copyright (c) 2026 Thibaut Goldsborough. Its full license is preserved at `external/kaggle-cell-tracking-competition/LICENSE`. Available historical compatibility edits were reapplied; modified files are not represented as pristine upstream files. The notebook builder includes that license when packaging this source.
+The relevant Python files under `external/kaggle-cell-tracking-competition/` are third-party source under the **BSD 3-Clause License**, copyright (c) 2026 Thibaut Goldsborough. Its full license is preserved at `external/kaggle-cell-tracking-competition/LICENSE`. The bundled source includes compatibility modifications and is not presented as pristine upstream code. The notebook builder includes that license when packaging this source.
 
 ## Optional integrations and research references
 

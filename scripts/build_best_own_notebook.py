@@ -1,4 +1,4 @@
-"""Generate the recovered best-own Kaggle notebook without uploading or executing it."""
+"""Generate the best-own Kaggle notebook without uploading or executing it."""
 from __future__ import annotations
 
 import argparse
@@ -24,7 +24,7 @@ def main() -> int:
         'cells': [
             {'id': 'provenance', 'cell_type': 'markdown', 'metadata': {}, 'source': [
                 '# Biohub H9 v11 — historical best-own configuration\n\n'
-                'Historical public score: 0.898, reference 55950639. This is a recovered configuration, not a fresh score reproduction.\n\n'
+                'Historical public score: 0.89856, reference 55950639. Generating this notebook does not reproduce that score.\n\n'
                 'Attach the competition input and these inputs through your own Kaggle account, subject to their licenses:\n' + inputs
             ]},
             {'id': 'inference', 'cell_type': 'code', 'metadata': {}, 'execution_count': None, 'outputs': [], 'source': source.splitlines(keepends=True)},

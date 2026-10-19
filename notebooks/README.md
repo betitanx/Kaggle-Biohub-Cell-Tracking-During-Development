@@ -24,4 +24,4 @@ Historical logs show Gurobi falling back to SCIP because a Gurobi license was un
 
 ## Regenerated versus submitted source
 
-`python scripts/build_best_own_notebook.py --output outputs/regenerated-h9-v11.ipynb` builds the currently recovered runner with the v11 parameters. It does not submit anything or prove equivalence with the historical submission. Use the included original to study the actual submitted execution contract. No fresh GPU reproduction was performed during this review.
+`python scripts/build_best_own_notebook.py --output outputs/regenerated-h9-v11.ipynb` builds the local runner with the v11 parameters. It does not submit anything or prove equivalence with the historical submission. Use the included original to study the actual submitted execution contract. No fresh GPU reproduction was performed during this review.

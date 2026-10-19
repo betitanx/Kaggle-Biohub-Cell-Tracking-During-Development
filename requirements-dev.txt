@@ -1,4 +1,4 @@
-# Lightweight verification environment used for this recovery (Python 3.12).
+# Lightweight verification environment (Python 3.12).
 iniconfig==2.3.1
 numpy==2.5.4
 packaging==26.3

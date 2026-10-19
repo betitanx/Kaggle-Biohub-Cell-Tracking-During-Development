@@ -1,4 +1,4 @@
-"""Verify the recovered package without network access, GPU inference, or live submissions."""
+"""Verify the package without network access, GPU inference, or live submissions."""
 from __future__ import annotations
 
 import ast

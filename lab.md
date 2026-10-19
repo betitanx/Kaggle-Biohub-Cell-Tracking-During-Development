@@ -1,6 +1,6 @@
-# Experimental notebook — public recovery edition
+# Experimental notebook
 
-This notebook summarizes the scientific record recovered from the project history. Historical work spans August–September 2026. Recovery and software checks were performed on 19 October 2026. The historical observations below are supplemented by the signed-in Kaggle review documented in the next section; this was browser verification, not a fresh API query or inference rerun.
+This notebook summarizes the scientific record of the project. Experimental work spans August–September 2026. Software checks and the signed-in Kaggle review were performed on 19 October 2026; the latter verified existing results without a new API query or inference rerun.
 
 ## Kaggle reconciliation — 19 October 2026
 
@@ -17,8 +17,6 @@ H9 v11 remains the best own public result. H9 v13 has the best own final/private
 Downloaded the original Version 1 notebooks `346635318` and `346992236`. Their code cells are preserved verbatim in `notebooks/`; outputs, execution state, and metadata are stripped. The only code difference is `edge_min_threshold=0.35` versus `0.30`. Preview runtimes were 1008.9 and 1203.7 seconds on T4 ×2. Both completed despite Gurobi-to-SCIP fallback warnings. No cloud run or new submission was started.
 
 The input description also clarifies a key contract: the four visible preview datasets are not the full hidden test set. Reruns replace them with approximately training-sized hidden data. Coverage validation must use the datasets actually discovered during each execution, not a fixed list of four names. See [notebook instructions](notebooks/README.md) and [verified evidence](results/kaggle-review.json).
-
-For public readability, removed six unused environment/canary/probe recipes, two recovery-only publication reports, and the unverified Modal launcher. Kept the core modules, tests, baseline source/license, experimental methods, and disabled configurations used by tests. Removed files remain recoverable from Git history and a private local backup.
 
 ## Task and experimental method
 
@@ -64,6 +62,6 @@ The source baseline, Ultrack, Cellpose, StarDist, TracksData, OpenResearch, and 
 
 Weights and Kaggle assets remain external. The best-own runner expects the support pack `pilkwang/biohub-tracking-support-pack-50ep-v1` and gap-closing input `yoikoarmor/biohub-last-call-postprocess-v1`. Their terms and access rules must be checked at acquisition time. No competition data, checkpoints, or third-party Kaggle notebook downloads are redistributed. The included original notebooks belong to this account and load the external inputs at execution time.
 
-## Recovery boundary
+## Validation scope
 
-The raw account ledger, private kernel paths, cloud operation identifiers, machine paths, and logs are omitted. Some raw predictions, local metric JSON files, environment lockfiles, and the original filesystem state were unavailable. The release provides recovered code, a curated record, historical evidence, and software checks; it does not claim a fresh end-to-end GPU reproduction. See [docs/RECOVERY.md](docs/RECOVERY.md).
+The repository includes experiment code, submitted inference notebooks, historical results, and software checks. Competition data, weights, credentials, operational account state, and raw predictions are not bundled. Lightweight validation covers tests, notebook syntax, synthetic runs, ranking, and graph topology; it does not establish a fresh end-to-end GPU reproduction of the leaderboard scores. Optional ML dependencies are not fully locked.

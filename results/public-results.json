@@ -1,8 +1,7 @@
 {
   "competition": "biohub-cell-tracking-during-development",
-  "evidence": "Historical session output; not re-queried against Kaggle during recovery.",
+  "evidence": "Historical submission records with rounded scores; see kaggle-review.json for exact scores verified on 19 October 2026.",
   "observed_at": "2026-09-24T02:01:12.344Z",
-  "source_call_id": "call_Zn1m0Sem2vxzYll77kma5rb4",
   "results": [
     {
       "candidate": "classical_peak_link__q995_d7",

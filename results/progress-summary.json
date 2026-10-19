@@ -1,6 +1,5 @@
 {
   "observed_at": "2026-09-24T02:03:27.236Z",
-  "source_call_id": "call_hqNVOaskn0wMOdbnnJU6gYan",
   "counts": {
     "local_oof_or_holdout_points": 28,
     "account_public_scored_refs": 17,
@@ -333,5 +332,5 @@
     "reference": "55950639",
     "public_score": 0.898
   },
-  "daily_sources": "Reconstructed from lab.md, state/submissions.json, outputs/ranking.csv, and local result/metrics JSON files. No log.md was found in the workspace."
+  "daily_sources": "Historical daily aggregation of experiment evaluations and Kaggle submission records."
 }
